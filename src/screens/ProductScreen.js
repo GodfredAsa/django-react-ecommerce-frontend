@@ -18,7 +18,7 @@ const ProductScreen = () => {
     }
     fetchProducts();
     console.log(product.rating)
-  }, []);
+  }, [param.id]);
 
   return (
     <div>
