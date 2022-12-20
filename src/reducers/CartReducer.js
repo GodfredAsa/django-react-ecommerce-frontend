@@ -22,12 +22,22 @@ export const CartReducer = (state={cartItems: []}, action) =>{
                     cartItems: [...state.cartItems, item]
                  }
             }
+//  adding remove item from cart reducer 
 
-        default:
-            return state;
+
+case CART_REMOVE_ITEM:
+    // in action.payload is the id 
+    return{
+        ...state, 
+        cartItems: state.cartItems.filter(x => x.product !== action.payload)
     }
 
 
 
 
+        default:
+            return state;
+    }
 }
+
+export default CartReducer;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { Row, Col, Image, ListGroup, Button, Card, Form } from "react-bootstrap";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams} from "react-router-dom";
 import Review from "../components/Review";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductDetails } from "../actions/ProductDetailsAction";
@@ -13,18 +13,17 @@ const ProductScreen = () => {
   const productId = useParams().id;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  
   const productDetails = useSelector((state) => state.productDetails);
   const { error, loading, product } = productDetails;
 
   useEffect(() => {
     dispatch(ProductDetails(productId));
   }, [dispatch, productId]);
-
-
+  
   const addToCartHandler = () =>{
+    localStorage.setItem("qty", qty)
     navigate(`/cart/${productId}?qty=${qty}`)
-    console.log(qty, "product Id:", productId)
   } 
   const qtyChangeHandler = (e) => {
     setQty(e.target.value) 
@@ -89,7 +88,6 @@ const ProductScreen = () => {
                       <Form.Control 
                                 as="select" 
                                 value={qty} 
-                                // onChange={(e)=> setQty(e.target.value)}
                                 onChange={qtyChangeHandler}
                                 >
 
