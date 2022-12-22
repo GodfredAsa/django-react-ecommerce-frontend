@@ -32,9 +32,6 @@ case CART_REMOVE_ITEM:
         cartItems: state.cartItems.filter(x => x.product !== action.payload)
     }
 
-
-
-
         default:
             return state;
     }
