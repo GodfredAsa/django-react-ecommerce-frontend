@@ -9,7 +9,7 @@ import FormContainer from "../components/FormContainer";
 
 const LoginScreen = () => {
 
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const navigate = useNavigate();
@@ -25,8 +25,8 @@ const LoginScreen = () => {
         }
     }, [userInfo, navigate, cartItems])
 
-    const usernameChangeHandler = (e) => {
-        setUsername(e.target.value);
+    const emailChangeHandler = (e) => {
+        setEmail(e.target.value);
     }
 
     const passwordChangeHandler = (e) => {
@@ -35,7 +35,7 @@ const LoginScreen = () => {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(Login(username, password));
+        dispatch(Login(email, password));
     }
 
     return (
@@ -45,12 +45,13 @@ const LoginScreen = () => {
             {loading && <Loader/>}
             <Form onSubmit={submitHandler}>
 
-                <Form.Group controlId="username">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control 
-                        type="text"
-                        placeholder="Enter Username"
-                        onChange={usernameChangeHandler}
+                <Form.Group controlId="email">
+                    <Form.Label>Email Address</Form.Label>
+                    <Form.Control
+                        value={email} 
+                        type="email"
+                        placeholder="Enter Email"
+                        onChange={emailChangeHandler}
                     ></Form.Control>
                 </Form.Group>
 

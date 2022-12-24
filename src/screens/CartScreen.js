@@ -96,9 +96,10 @@ const CartScreen = () => {
                     <Button
                       type="button"
                       variant="light"
+                      className="btn bg-danger"
                       onClick={() => removeFromCartHandler(item.product)}
                     >
-                      <i className="fas fa-trash"></i>
+                      <i className="fas fa-trash text-white">Delete</i>
                     </Button>
                   </Col>
                 </Row>

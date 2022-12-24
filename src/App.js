@@ -6,6 +6,7 @@ import ProductScreen from "./screens/ProductScreen";
 import { Container } from "react-bootstrap";
 import CartScreen from "./screens/CartScreen";
 import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/" element={<HomeScreen />} exact />
             <Route path="/product/:id" element={<ProductScreen />} />
             <Route path="/login" element={<LoginScreen />} />
+            <Route path="/register" element={<RegisterScreen />} />
             {/* pattern /cart/:id means the id is optional  */}
             {/* implements multiple routes in a nested format */}
 
