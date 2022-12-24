@@ -7,15 +7,16 @@ import {
 } from '../constants/UserConstants'
 
 
-const Login = (email, password) => async (dispatch) =>{
+const Login = (username, password) => async (dispatch) =>{
     try{
         dispatch({type: USER_LOGIN_REQUEST})
+
         const config = {
-            headers: {'Content-type': 'application/json'}
+            headers: {'Content-Type': 'application/json'}
         }
-        const {data} = axios.post(
+        const {data} = await axios.post(
             '/api/users/login',
-            {'username': email, 'password': password}, config
+            {'username': username, 'password': password}, config
             )
 
             dispatch({
@@ -33,3 +34,8 @@ const Login = (email, password) => async (dispatch) =>{
 }
  
 export default Login;
+
+export const Logout = () => async (dispatch) =>{
+    localStorage.removeItem("userInfo");
+    dispatch({type: USER_LOGOUT})
+}

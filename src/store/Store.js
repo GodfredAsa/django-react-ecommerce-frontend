@@ -10,7 +10,7 @@ const reducer = combineReducers({
     productList: productListReducers,
     productDetails: ProductDetailReducer,
     cart: CartReducer,
-    userlogin: UserLoginReducer
+    userLogin: UserLoginReducer
 })
 
 // pulling cart data from localStorage into our state
@@ -20,7 +20,7 @@ const cartItemsFromStorage = localStorage.getItem('cartItems') ?
 
 // retrieving userInfo set in local Storage in userActions.js if user login is successful
 const userInfoFromStorage = localStorage.getItem('userInfo') ? 
-    JSON.parse(localStorage.getItem('userInfo')): null 
+    JSON.parse(localStorage.getItem('userInfo')): {} 
 
 // adding cartItems to initial state
 const initialState = {
