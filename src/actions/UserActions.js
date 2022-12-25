@@ -11,7 +11,14 @@ import {
 
     USER_DETAILS_REQUEST,
     USER_DETAILS_SUCCESS,
-    USER_DETAILS_FAIL
+    USER_DETAILS_RESET,
+    USER_DETAILS_FAIL,
+
+    USER_UPDATE_PROFILE_REQUEST,
+    USER_UPDATE_PROFILE_SUCCESS,
+    USER_UPDATE_PROFILE_FAIL,
+    USER_UPDATE_PROFILE_RESET
+
 } from '../constants/UserConstants'
 
 
@@ -47,6 +54,7 @@ export default Login;
 export const Logout = () => async (dispatch) =>{
     localStorage.removeItem("userInfo");
     dispatch({type: USER_LOGOUT})
+    dispatch({type: USER_DETAILS_RESET})
 }
 
 // REGISTER ACTIONS 
@@ -109,6 +117,46 @@ export const GetUserDetails = (id) => async (dispatch, getState) =>{
 
     }catch(error){
         dispatch({type: USER_DETAILS_FAIL,
+        payload: error.response && error.response.data.detail ? 
+        error.response.data.detail : error.message,
+    })}
+}
+
+export const UpdateUserProfile = (user) => async (dispatch, getState) =>{
+    try{
+        dispatch({type: USER_UPDATE_PROFILE_REQUEST});
+
+        // getting the login user
+        const {
+            userLogin: {userInfo}
+        } = getState()
+
+        const config = {
+            headers: {'Content-Type': 'application/json',
+            Authorization: `Bearer ${userInfo.token}`
+        }
+        };
+
+        // the value of id refers to profile. value of id will just say profile
+        const {data} = await axios.put(
+            `/api/users/profile/update`, 
+            user, 
+            config );
+
+            dispatch({
+                type: USER_UPDATE_PROFILE_SUCCESS,
+                payload: data
+            })
+
+            dispatch({
+                type: USER_LOGIN_SUCCESS,
+                payload: data
+            })
+
+            localStorage.setItem('userInfo', JSON.stringify(data))
+
+    }catch(error){
+        dispatch({type: USER_UPDATE_PROFILE_FAIL,
         payload: error.response && error.response.data.detail ? 
         error.response.data.detail : error.message,
     })}

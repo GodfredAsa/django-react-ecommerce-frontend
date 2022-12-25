@@ -5,7 +5,8 @@ import {Form, Button, Row, Col} from 'react-bootstrap'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {useDispatch, useSelector} from "react-redux";
-import {GetUserDetails} from '../actions/UserActions'
+import {GetUserDetails, UpdateUserProfile} from '../actions/UserActions';
+import {USER_UPDATE_PROFILE_RESET} from '../constants/UserConstants'
 
 
 const  ProfileScreen = () => {
@@ -26,22 +27,25 @@ const  ProfileScreen = () => {
     const userLogin = useSelector(state => state.userLogin);
     const {userInfo} = userLogin;
 
+    const userUpdateProfile = useSelector(state => state.userUpdateProfile);
+    const {success} = userUpdateProfile;
+
 
     useEffect(() => {
         if(!userInfo){
             navigate('/login')
         }else{
             // check user information 
-            if(!user || !user.name){
-                dispatch(GetUserDetails('profile'))
-                console.log("User Details ===>>>")
+            if(!user || !user.name || success){ 
+                dispatch({type: USER_UPDATE_PROFILE_RESET})
+                dispatch(GetUserDetails('profile'));
             }else{
                 setName(user.name);
                 setEmail(user.email);
             }
         }
       
-    }, [userInfo, user, dispatch, navigate ])
+    }, [userInfo, user, dispatch, navigate, success])
 
     const emailChangeHandler = (e) => {
         setEmail(e.target.value);
@@ -64,8 +68,14 @@ const  ProfileScreen = () => {
         if(password !== confirmPassword){
             setMessage('Passwords Do Not Match')
         }else{
-            // dispatch(Register(name, email, password));
-            console.log("Updating user details")
+            dispatch(UpdateUserProfile(
+                {'_id': user._id,
+                'name': name,
+                'email': email,
+                'password': password
+            }));
+            
+            setMessage('')
         }
     }
 
