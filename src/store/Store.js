@@ -24,11 +24,15 @@ const cartItemsFromStorage = localStorage.getItem('cartItems') ?
 // retrieving userInfo set in local Storage in userActions.js if user login is successful
 const userInfoFromStorage = localStorage.getItem('userInfo') ? 
     JSON.parse(localStorage.getItem('userInfo')): {} 
-
+    
+const shippingAddressFromStorage = localStorage.getItem('shippingAdress') ? 
+        JSON.parse(localStorage.getItem('shippingAdress')): {} 
 // adding cartItems to initial state
 const initialState = {
-    cart: { cartItems: cartItemsFromStorage},
-    userLogin: { userInfo: userInfoFromStorage}
+    cart: { cartItems: cartItemsFromStorage,
+            shippingAdrress: shippingAddressFromStorage
+    },
+    userLogin: { userInfo: userInfoFromStorage},
 }
 const middleware = [thunk]
 const store = createStore(reducer, initialState, composeWithDevTools(applyMiddleware(...middleware)))

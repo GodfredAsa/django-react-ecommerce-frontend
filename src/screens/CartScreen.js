@@ -9,7 +9,7 @@ import {
   Card,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams, useNavigate, Navigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Message from "../components/Message";
 import {AddToCart, RemoveFromCart} from "../actions/CartActions";
 
@@ -22,6 +22,8 @@ const CartScreen = () => {
   const dispatch = useDispatch();
   //    get cartItems set in local storage from the store
   const cart = useSelector((state) => state.cart);
+  const userLogin = useSelector(state => state.userLogin);
+  const { userInfo } = userLogin;
   //    destructuring cartItems to obtain the items in the cart
   const { cartItems } = cart;
 
@@ -39,9 +41,12 @@ const CartScreen = () => {
   };
 
   const proceedToCheckoutHandler = () =>{
-    // redirecting to the shipping page 
-    navigate('/login?redirect=shipping')
-    console.log("checking out ")
+    if(!userInfo){
+      navigate('/login')
+    }else{
+      navigate('/shipping')
+    }
+
   }
 
   return (

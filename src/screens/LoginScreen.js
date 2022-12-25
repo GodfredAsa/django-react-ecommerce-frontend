@@ -64,7 +64,7 @@ const LoginScreen = () => {
                         onChange={passwordChangeHandler}
                     ></Form.Control>
                 </Form.Group>
-                <Button type="submit" variant="warning" className="my-3 w-100 ">Sign in</Button>
+                <Button type="submit" variant="info" className="my-3 w-100 ">Sign in</Button>
 
             </Form>
 
