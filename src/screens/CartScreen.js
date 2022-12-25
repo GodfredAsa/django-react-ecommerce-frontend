@@ -90,7 +90,7 @@ const CartScreen = () => {
                         </option>
                       ))}
                     </Form.Control>
-                  </Col>
+                  </Col> 
 
                   <Col md={1}>
                     <Button
@@ -99,7 +99,8 @@ const CartScreen = () => {
                       className="btn bg-danger"
                       onClick={() => removeFromCartHandler(item.product)}
                     >
-                      <i className="fas fa-trash text-white">Delete</i>
+                      <i className="fas fa-trash text-white " style={{"display": 'inline'}}></i>
+                      <span className="text-white px-2" style={{"display": 'inline'}}>Delete</span>
                     </Button>
                   </Col>
                 </Row>

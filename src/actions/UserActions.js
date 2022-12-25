@@ -7,7 +7,11 @@ import {
 
     USER_REGISTER_REQUEST,
     USER_REGISTER_SUCCESS,
-    USER_REGISTER_FAIL
+    USER_REGISTER_FAIL,
+
+    USER_DETAILS_REQUEST,
+    USER_DETAILS_SUCCESS,
+    USER_DETAILS_FAIL
 } from '../constants/UserConstants'
 
 
@@ -78,6 +82,38 @@ export const Register = (name, email, password) => async (dispatch) =>{
         error.response.data.detail : error.message,
     })}
 }
+
+
+export const GetUserDetails = (id) => async (dispatch, getState) =>{
+    try{
+        dispatch({type: USER_DETAILS_REQUEST});
+
+        // getting the login user
+        const {
+            userLogin: {userInfo}
+        } = getState()
+
+        const config = {
+            headers: {'Content-Type': 'application/json',
+            Authorization: `Bearer ${userInfo.token}`
+        }
+        };
+
+        // the value of id refers to profile. value of id will just say profile
+        const {data} = await axios.get(`/api/users/${id}`, config )
+
+            dispatch({
+                type: USER_DETAILS_SUCCESS,
+                payload: data
+            })
+
+    }catch(error){
+        dispatch({type: USER_DETAILS_FAIL,
+        payload: error.response && error.response.data.detail ? 
+        error.response.data.detail : error.message,
+    })}
+}
+
+
  
-// export default Register;
 

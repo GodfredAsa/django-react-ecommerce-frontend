@@ -13,9 +13,7 @@ const dispatch  = useDispatch();
 
 
 const logoutHandler = () => {
-
   dispatch(Logout())
-
 }
 
   return (
