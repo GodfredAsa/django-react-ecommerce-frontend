@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import { useDispatch} from "react-redux";
 import {saveShippingAddress} from '../actions/CartActions'
+import CheckoutSteps from '../components/CheckoutSteps'
 import FormContainer from "../components/FormContainer";
 
 const ShippingScreen = () => {
 
-  const shippingInfo = JSON.parse(localStorage.getItem('shippingAdress'));
+  const shippingInfo = JSON.parse(localStorage.getItem('shippingAddress'));
 
   const [address, setAddress] = useState(shippingInfo ? shippingInfo.address : '');
   const [city, setCity] = useState(shippingInfo ? shippingInfo.city : '');
@@ -45,10 +46,12 @@ const ShippingScreen = () => {
     }
         dispatch(saveShippingAddress(shippingData));
         navigate('/payment')
+        console.log(shippingData)
   }
 
   return (
         <FormContainer>
+          <CheckoutSteps />
             <h1>Shipping Information </h1>
             <Form onSubmit={submitHandler}>
 
