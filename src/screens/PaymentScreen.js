@@ -11,14 +11,9 @@ import {savePaymentMethod} from '../actions/CartActions'
 const  PaymentScreen = () => {
     
     const [paymentMethod, setPaymentMethod] = useState('PayPal');
-    const [setPage] = useState('');
-
-
-    const shippingInfo = JSON.parse(localStorage.getItem('shippingAddress'));
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
 
     const paymentChangeHandler = (e) => {
         setPaymentMethod(e.target.value);
@@ -28,9 +23,7 @@ const  PaymentScreen = () => {
         e.preventDefault();
         dispatch(savePaymentMethod(paymentMethod));
         navigate('/placeorder');
-
     }
-
 
   return (
     <FormContainer>
@@ -46,13 +39,10 @@ const  PaymentScreen = () => {
                         id="paypal"
                         name="paymentMethod"
                         checked
-                        onChange={paymentChangeHandler}
-                        >
-
+                        onChange={paymentChangeHandler}>
                     </Form.Check>
                 </Col>
             </Form.Group>
-
             <Button type="submit" variant="info">Continue</Button>
 
         </Form>

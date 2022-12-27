@@ -44,7 +44,12 @@ const ShippingScreen = () => {
       postalCode,
       country
     }
-        dispatch(saveShippingAddress(shippingData));
+        dispatch(saveShippingAddress({
+          address,
+          city,
+          postalCode,
+          country
+        }));
         navigate('/payment')
         console.log(shippingData)
   }
@@ -100,7 +105,6 @@ const ShippingScreen = () => {
             </Form.Group>
 
             <Button type="submit" className=" w-100 my-3" variant="info">Continue</Button>
-
 
             </Form>
 
