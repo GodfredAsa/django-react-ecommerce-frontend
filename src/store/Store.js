@@ -4,6 +4,7 @@ import thunk from 'redux-thunk'
 import  productListReducers from '../reducers/ProductListReducers'
 import  ProductDetailReducer from '../reducers/ProductDetailReducer'
 import CartReducer from "../reducers/CartReducer"
+import {OrderCreateReducer, OrderDetailsReducer} from "../reducers/OrderReducers"
 import {
     UserLoginReducer, 
     UserRegisterReducer, 
@@ -11,7 +12,6 @@ import {
     UserUpdateProfileReducer
 } from "../reducers/UserReducer"
 
-import {OrderCreateReducer} from "../reducers/OrderReducers"
 
 const reducer = combineReducers({
     productList: productListReducers,
@@ -22,6 +22,7 @@ const reducer = combineReducers({
     userDetails: UserDetailsReducer,
     userUpdateProfile: UserUpdateProfileReducer,
     orderCreate: OrderCreateReducer,
+    orderDetails: OrderDetailsReducer,
 })
 
 // pulling cart data from localStorage into our state
