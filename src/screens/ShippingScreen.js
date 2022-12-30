@@ -51,7 +51,6 @@ const ShippingScreen = () => {
           country
         }));
         navigate('/payment')
-        console.log(shippingData)
   }
 
   return (
