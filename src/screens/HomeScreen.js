@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Product from "../components/Product";
 import ListProducts from "../actions/ProductActions";
@@ -43,6 +43,8 @@ const HomeScreen = () => {
           ))}
         </Row>
       )}
+
+      {products.length === 0 && <Container className="text-center my-5"><h3>No Products Available </h3></Container>}
     </div>
   );
 };
