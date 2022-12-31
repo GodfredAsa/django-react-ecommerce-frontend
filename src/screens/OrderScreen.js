@@ -19,21 +19,21 @@ const OrderScreen = () => {
     const orderpay = useSelector(state => state.orderPay);
     const {loading: loadingPay, success: successPay} = orderpay
 
-    // if(!order || successPay || order._id  !== Number(orderId)){
-    //     dispatch(GetOrderDetails(orderId))
-    // }
+    if(!order || successPay || order._id  !== Number(orderId)){
+        dispatch(GetOrderDetails(orderId))
+    }
 
-//     useEffect(()=>{
-//         if(!order || successPay || order._id !== Number(orderId)){
-//             dispatch(GetOrderDetails(orderId))
-//         }else if(!order.isPaid){
-//             if(!window.paypay){
-//                 addPayPalScript()
-//             }else{
-//                 setSdkReady(true)
-//             }
-// }
-//    }, [order, orderId, dispatch, successPay])
+    useEffect(()=>{
+        if(!order || successPay || order._id !== Number(orderId)){
+            dispatch(GetOrderDetails(orderId))
+        }else if(!order.isPaid){
+            if(!window.paypay){
+                addPayPalScript()
+            }else{
+                setSdkReady(true)
+            }
+}
+   }, [order, orderId, dispatch, successPay])
 
 // replace sb with the client id created from paypal
 const addPayPalScript = () => {
