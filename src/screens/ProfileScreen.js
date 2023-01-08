@@ -1,13 +1,15 @@
 import React from 'react'
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {Form, Button, Row, Col} from 'react-bootstrap'
+import { useNavigate } from "react-router-dom";
+import {Form, Button, Row, Col, Table, ButtonGroup} from 'react-bootstrap'
+
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {useDispatch, useSelector} from "react-redux";
 import {GetUserDetails, UpdateUserProfile} from '../actions/UserActions';
-import {USER_UPDATE_PROFILE_RESET} from '../constants/UserConstants'
-
+import {USER_UPDATE_PROFILE_RESET} from '../constants/UserConstants';
+import {MyOrderedLists} from '../actions/OrderActions'
+import { LinkContainer } from 'react-router-bootstrap';
 
 const  ProfileScreen = () => {
     const [name, setName] = useState('');
@@ -29,6 +31,15 @@ const  ProfileScreen = () => {
 
     const userUpdateProfile = useSelector(state => state.userUpdateProfile);
     const {success} = userUpdateProfile;
+    
+    // ======================== USER PROFILE WORKING ON THIS =================================
+    const myOrderedList = useSelector(state => state.myOrderList);
+
+    // removed the orders and put it in local storage
+    const {loading:loadingOrders, error: errorOrders } = myOrderedList;
+    // const {loading:loadingOrders, error: errorOrders, orders } = myOrderedList;
+
+    const orders = JSON.parse(localStorage.getItem('myOrders'));
 
 
     useEffect(() => {
@@ -39,6 +50,7 @@ const  ProfileScreen = () => {
             if(!user || !user.name || success){ 
                 dispatch({type: USER_UPDATE_PROFILE_RESET})
                 dispatch(GetUserDetails('profile'));
+                dispatch(MyOrderedLists())
             }else{
                 setName(user.name);
                 setEmail(user.email);
@@ -138,7 +150,60 @@ const  ProfileScreen = () => {
         </Col>
 
         <Col md={9}>
-            <h2>My Orders</h2>
+            <h2>My Orders <span style=
+            {{'color': 'white', 
+            'fontSize': '1.5rem', 
+            'padding': '5px 8px ',
+            // 'backgroundColor': 'cornflowerblue', 
+            'borderRadius': '10px'
+            }} className="bg-info">{orders.length}</span></h2>
+            {loadingOrders && <Loader/>}
+            {errorOrders && <Message variant="danger">{errorOrders}</Message>}
+
+          <Table striped responsive className='table-sm'>
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Date</td>
+                    <td>Total</td>
+                    <td>Paid</td>
+                    <td>Delivered</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+               {orders.map( order =>  
+               <tr key={order._id}>
+                    <td>{order._id}</td>
+                    <td>{order.createdAt.substring(0,10)}</td>
+                    <td>${order.totalPrice}</td>
+                    <td>{order.isPaid === false ? 'xxxx-xx-xx' : order.paidAt.substring(0,10)}</td>
+                    <td>{order.isDelivered === false ? 'xxxx-xx-xx' : order.deliveredAt.substring(0,10)}</td>
+                    <td>
+                        <ButtonGroup>
+                           <LinkContainer to={``}>
+                                <Button 
+                                        className='btn-sm' 
+                                        variant='danger' 
+                                        type='button' 
+                                        style={{'fontSize': '1rem'}}>Delete
+                                </Button>
+                           
+                           </LinkContainer>
+                           <LinkContainer to={`/orders/${order._id}`}>
+                                <Button 
+                                        className='btn-sm' 
+                                        variant='info' 
+                                        type='button' 
+                                        style={{'fontSize': '1rem'}}>Details
+                                    </Button>
+                            </LinkContainer>
+                        </ButtonGroup>
+                    </td>
+                </tr>) }
+            </tbody>
+          </Table>
+            
         </Col>
     </Row>
   )

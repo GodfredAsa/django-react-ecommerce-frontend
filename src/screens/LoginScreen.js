@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {Form, Button, Row, Col} from 'react-bootstrap'
 import Message from '../components/Message'
@@ -18,12 +18,21 @@ const LoginScreen = () => {
 
     const userLogin = useSelector(state => state.userLogin);
     const { loading, error, userInfo} = userLogin;
+    console.log(userInfo)
+// TODO THIS SECTION OF THE CODE MUST BE CORRECTED 
+    // if(userInfo) {
+    //     navigate('/cart')
+    // }else if(!userInfo){
+    //     navigate('/login')
+    // }
 
-    useEffect(() => {
-        if(userInfo && cartItems.length >=1) {
-            navigate('/cart')
-        }
-    }, [userInfo, navigate, cartItems])
+    // useEffect(() => {
+    //     if(userInfo && cartItems.length >=1) {
+    //         navigate('/cart')
+    //     }else{
+    //         navigate('/products')
+    //     }
+    // }, [userInfo, navigate, cartItems])
 
     const emailChangeHandler = (e) => {
         setEmail(e.target.value);

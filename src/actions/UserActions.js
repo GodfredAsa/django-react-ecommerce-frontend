@@ -17,10 +17,11 @@ import {
     USER_UPDATE_PROFILE_REQUEST,
     USER_UPDATE_PROFILE_SUCCESS,
     USER_UPDATE_PROFILE_FAIL,
-    USER_UPDATE_PROFILE_RESET
+    // USER_UPDATE_PROFILE_RESET
 
 } from '../constants/UserConstants'
 
+import {MY_ORDER_LIST_RESET} from '../constants/OrderConstants'
 
 const Login = (email, password) => async (dispatch) =>{
     try{
@@ -53,8 +54,9 @@ export default Login;
 // LOG OUT ACTIONS 
 export const Logout = () => async (dispatch) =>{
     localStorage.removeItem("userInfo");
-    dispatch({type: USER_LOGOUT})
-    dispatch({type: USER_DETAILS_RESET})
+    dispatch({type: USER_LOGOUT});
+    dispatch({type: USER_DETAILS_RESET});
+    dispatch({type: MY_ORDER_LIST_RESET})
 }
 
 // REGISTER ACTIONS 

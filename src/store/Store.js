@@ -8,6 +8,7 @@ import {
     OrderCreateReducer,
     OrderDetailsReducer,
     OrderPayReducer,
+    MyOrderListReducer,
 } from "../reducers/OrderReducers"
 import {
     UserLoginReducer, 
@@ -29,12 +30,16 @@ const reducer = combineReducers({
     orderCreate: OrderCreateReducer,
     orderDetails: OrderDetailsReducer,
     orderPay: OrderPayReducer,
+    myOrderList: MyOrderListReducer,
 })
 
 // pulling cart data from localStorage into our state
 // if item exist get items from local storage if not return empty array 
 const cartItemsFromStorage = localStorage.getItem('cartItems') ? 
     JSON.parse(localStorage.getItem('cartItems')): []
+
+const myOrdersFromStorage = localStorage.getItem('myOrders') ? 
+    JSON.parse(localStorage.getItem('myOrders')): []
 
 // retrieving userInfo set in local Storage in userActions.js if user login is successful
 const userInfoFromStorage = localStorage.getItem('userInfo') ? 
@@ -45,9 +50,10 @@ const shippingAddressFromStorage = localStorage.getItem('shippingAdress') ?
 // adding cartItems to initial state
 const initialState = {
     cart: { cartItems: cartItemsFromStorage,
-            shippingAdrress: shippingAddressFromStorage
+            shippingAdrress: shippingAddressFromStorage,
     },
     userLogin: { userInfo: userInfoFromStorage},
+    myOrderList:{ myOrders: myOrdersFromStorage},
 }
 const middleware = [thunk]
 const store = createStore(reducer, initialState, composeWithDevTools(applyMiddleware(...middleware)))

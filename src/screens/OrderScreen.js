@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {  useParams } from "react-router-dom";
-import { Row, Col, Image, Card, ListGroup } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import { Row, Col, Image, Card, ListGroup, Button } from "react-bootstrap";
 import { useDispatch, useSelector} from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import {GetOrderDetails, PayOrder} from '../actions/OrderActions';
+import {GetOrderDetails} from '../actions/OrderActions';
+
+//TODO Could not integrate with paypal will try it later
 
 const OrderScreen = () => {
     const orderId = useParams().id;
@@ -12,6 +14,8 @@ const OrderScreen = () => {
     const [sdkReady, setSdkReady] = useState(false);
     const shippingInfo = JSON.parse(localStorage.getItem('shippingAddress'));
     const paymentMethod = JSON.parse(localStorage.getItem('paymentMethod'));
+
+    const navigate = useNavigate();
     
     const orderDetails = useSelector(state => state.orderDetails);
     const {error, loading, order } = orderDetails
@@ -23,17 +27,18 @@ const OrderScreen = () => {
         dispatch(GetOrderDetails(orderId))
     }
 
-    useEffect(()=>{
-        if(!order || successPay || order._id !== Number(orderId)){
-            dispatch(GetOrderDetails(orderId))
-        }else if(!order.isPaid){
-            if(!window.paypay){
-                addPayPalScript()
-            }else{
-                setSdkReady(true)
-            }
-}
-   }, [order, orderId, dispatch, successPay])
+
+//     useEffect(()=>{
+//         if(!order || successPay || order._id !== Number(orderId)){
+//             dispatch(GetOrderDetails(orderId))
+//         }else if(!order.isPaid){
+//             if(!window.paypay){
+//                 addPayPalScript()
+//             }else{
+//                 setSdkReady(true)
+//             }
+// }
+//    }, [order, orderId, dispatch, successPay])
 
 // replace sb with the client id created from paypal
 const addPayPalScript = () => {
@@ -51,6 +56,10 @@ const addPayPalScript = () => {
     // const successPaymentHandler = (paymentResult) => {
     //     dispatch(PayOrder(orderId, paymentResult))
     // }
+
+    const orderProcessHandler = () => {
+        navigate('/profile')
+    }
 
 
   return ( <div>
@@ -132,7 +141,15 @@ const addPayPalScript = () => {
                             </Row>}
                         </ListGroup.Item>
 
+                        
+                    
+                     
                     </ListGroup>
+
+                    {/* Enter paypal component */}
+                    <Button className="mt-3 btn-warning w-100" onClick={orderProcessHandler}>Paypal</Button>
+                                {/* <Button className="my-1 btn-danger w-100">Paypal</Button>
+                                <Button className="my-1 btn-success w-100">Paypal</Button> */}
                 </Card>
             </Col>
         </Row>
@@ -140,4 +157,4 @@ const addPayPalScript = () => {
   )
 }
 
-export default OrderScreen;
+export default React.memo(OrderScreen);
