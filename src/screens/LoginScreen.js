@@ -14,25 +14,18 @@ const LoginScreen = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [cartItems] = useState(localStorage.getItem('cartItems'));
 
     const userLogin = useSelector(state => state.userLogin);
     const { loading, error, userInfo} = userLogin;
-    console.log(userInfo)
-// TODO THIS SECTION OF THE CODE MUST BE CORRECTED 
-    // if(userInfo) {
-    //     navigate('/cart')
-    // }else if(!userInfo){
-    //     navigate('/login')
-    // }
-
-    // useEffect(() => {
-    //     if(userInfo && cartItems.length >=1) {
-    //         navigate('/cart')
-    //     }else{
-    //         navigate('/products')
-    //     }
-    // }, [userInfo, navigate, cartItems])
+   
+    useEffect(() => {
+        if(userInfo) {
+            navigate('/cart')
+            
+        }else if(!userInfo){
+            navigate('/login')
+        }
+    }, [userInfo, navigate])
 
     const emailChangeHandler = (e) => {
         setEmail(e.target.value);
@@ -79,7 +72,6 @@ const LoginScreen = () => {
 
             <Row className="py-3">
                 <Col> New Customer? <Link to='/register'><span style={{'color': 'blue'}}>Register</span></Link></Col>
-                {/* <Col> New Customer? <Link to={redirect ? `/register?redirect=${redirect}`: '/register'}>Register</Link></Col> */}
             </Row>
         </FormContainer>
       );

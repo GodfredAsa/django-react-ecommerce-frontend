@@ -6,13 +6,11 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import {GetOrderDetails} from '../actions/OrderActions';
 
-//TODO Could not integrate with paypal will try it later
-
 const OrderScreen = () => {
     const orderId = useParams().id;
     const dispatch = useDispatch();
     const [sdkReady, setSdkReady] = useState(false);
-    const shippingInfo = JSON.parse(localStorage.getItem('shippingAddress'));
+    const shippingInfo = JSON.parse(localStorage.getItem('myOrders'))[22].shippingAddress;
     const paymentMethod = JSON.parse(localStorage.getItem('paymentMethod'));
 
     const navigate = useNavigate();
@@ -23,22 +21,17 @@ const OrderScreen = () => {
     const orderpay = useSelector(state => state.orderPay);
     const {loading: loadingPay, success: successPay} = orderpay
 
-    if(!order || successPay || order._id  !== Number(orderId)){
-        dispatch(GetOrderDetails(orderId))
-    }
-
-
-//     useEffect(()=>{
-//         if(!order || successPay || order._id !== Number(orderId)){
-//             dispatch(GetOrderDetails(orderId))
-//         }else if(!order.isPaid){
-//             if(!window.paypay){
-//                 addPayPalScript()
-//             }else{
-//                 setSdkReady(true)
-//             }
-// }
-//    }, [order, orderId, dispatch, successPay])
+    useEffect(()=>{
+        if(!order || successPay || order._id !== Number(orderId)){
+            dispatch(GetOrderDetails(orderId))
+        }else if(!order.isPaid){
+            if(!window.paypay){
+                addPayPalScript()
+            }else{
+                setSdkReady(true)
+            }
+}
+   }, [order, orderId, dispatch, successPay])
 
 // replace sb with the client id created from paypal
 const addPayPalScript = () => {
@@ -54,13 +47,12 @@ const addPayPalScript = () => {
 
 // the paymentResult is what paypal returns
     // const successPaymentHandler = (paymentResult) => {
-    //     dispatch(PayOrder(orderId, paymentResult))
+    //     // dispatch(PayOrder(orderId, paymentResult))
     // }
 
     const orderProcessHandler = () => {
         navigate('/profile')
     }
-
 
   return ( <div>
 
@@ -71,7 +63,7 @@ const addPayPalScript = () => {
             {error && <Message variant="danger">{error}</Message>}
             <Col md={8}>
                 <ListGroup>
-                    <ListGroup.Item>
+                    {order && <ListGroup.Item>
                         <h2>Shipping</h2>
                         <p> <b>Name:  </b>{order.user.name} </p>
                         <p> <b>Email:  </b><a href={`mailto:${order.user.email}`} >{order.user.email}</a> </p>
@@ -80,15 +72,15 @@ const addPayPalScript = () => {
                         {order.isDelivered ? <Message variant="success">Delivered at: {order.paidAt.substring(0,10)} </Message> 
                                      : <Message variant="warning">Not Delivered</Message>
                         }
-                    </ListGroup.Item>
+                    </ListGroup.Item>}
 
-                    <ListGroup.Item>
+                   {order &&  <ListGroup.Item>
                         <h2>Payment Method</h2>
                         <p><b>Method: </b>{paymentMethod} </p>
                        {order.isPaid ? <Message variant="success">Paid at: {order.paidAt.substring(0,10)} </Message> 
                                      : <Message variant="warning">Not Paid</Message>
                         }
-                    </ListGroup.Item>
+                    </ListGroup.Item>}
 
                     <ListGroup.Item>
                         <h2>Order Items</h2>

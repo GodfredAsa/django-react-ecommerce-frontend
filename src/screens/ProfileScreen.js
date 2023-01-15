@@ -1,15 +1,14 @@
-import React from 'react'
+import React  from 'react'
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {Form, Button, Row, Col, Table, ButtonGroup} from 'react-bootstrap'
-
+import { LinkContainer } from 'react-router-bootstrap';
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {useDispatch, useSelector} from "react-redux";
 import {GetUserDetails, UpdateUserProfile} from '../actions/UserActions';
 import {USER_UPDATE_PROFILE_RESET} from '../constants/UserConstants';
 import {MyOrderedLists} from '../actions/OrderActions'
-import { LinkContainer } from 'react-router-bootstrap';
 
 const  ProfileScreen = () => {
     const [name, setName] = useState('');
@@ -20,7 +19,6 @@ const  ProfileScreen = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    // const [cartItems] = useState(localStorage.getItem('cartItems'));
 
     const userDetails = useSelector(state => state.userDetails);
     const { loading, error, user} = userDetails;
@@ -32,22 +30,26 @@ const  ProfileScreen = () => {
     const userUpdateProfile = useSelector(state => state.userUpdateProfile);
     const {success} = userUpdateProfile;
     
-    // ======================== USER PROFILE WORKING ON THIS =================================
     const myOrderedList = useSelector(state => state.myOrderList);
 
-    // removed the orders and put it in local storage
-    const {loading:loadingOrders, error: errorOrders } = myOrderedList;
-    // const {loading:loadingOrders, error: errorOrders, orders } = myOrderedList;
+    const {loading: loadingOrders, error: errorOrders } = myOrderedList;
 
     const orders = JSON.parse(localStorage.getItem('myOrders'));
+
+    useEffect(()=> {
+    if(!userInfo){
+        dispatch({type: USER_UPDATE_PROFILE_RESET})
+        dispatch(GetUserDetails('profile'));
+        dispatch(MyOrderedLists())
+    }
+}, [dispatch, userInfo, orders])
 
 
     useEffect(() => {
         if(!userInfo){
             navigate('/login')
         }else{
-            // check user information 
-            if(!user || !user.name || success){ 
+            if(!orders || success || loading){ 
                 dispatch({type: USER_UPDATE_PROFILE_RESET})
                 dispatch(GetUserDetails('profile'));
                 dispatch(MyOrderedLists())
@@ -57,7 +59,7 @@ const  ProfileScreen = () => {
             }
         }
       
-    }, [userInfo, user, dispatch, navigate, success])
+    }, [userInfo, orders, user, dispatch, navigate, success, loading])
 
     const emailChangeHandler = (e) => {
         setEmail(e.target.value);
@@ -91,9 +93,6 @@ const  ProfileScreen = () => {
         }
     }
 
-
-
-
   return (
     <Row>
         <Col md={3}>
@@ -104,7 +103,6 @@ const  ProfileScreen = () => {
     <Form onSubmit={submitHandler}>
 
     <Form.Group controlId="name" className='my-2'>
-            {/* <Form.Label>Name</Form.Label> */}
             <Form.Control
                 required
                 value={name} 
@@ -115,7 +113,6 @@ const  ProfileScreen = () => {
         </Form.Group>
 
         <Form.Group controlId="email" className='my-2'>
-            {/* <Form.Label>Email Address</Form.Label> */}
             <Form.Control
                 required
                 value={email} 
@@ -126,7 +123,6 @@ const  ProfileScreen = () => {
         </Form.Group>
 
         <Form.Group controlId="password" className='my-2'>
-            {/* <Form.Label>Password</Form.Label> */}
             <Form.Control 
                 type="password"
                 placeholder="Enter Password"
@@ -136,7 +132,6 @@ const  ProfileScreen = () => {
         </Form.Group>
 
         <Form.Group controlId="passwordConfirmed" className="my-3">
-            {/* <Form.Label>Confirm Password</Form.Label> */}
             <Form.Control 
                 type="password"
                 placeholder="Confirm Password"
@@ -154,9 +149,8 @@ const  ProfileScreen = () => {
             {{'color': 'white', 
             'fontSize': '1.5rem', 
             'padding': '5px 8px ',
-            // 'backgroundColor': 'cornflowerblue', 
             'borderRadius': '10px'
-            }} className="bg-info">{orders.length}</span></h2>
+            }} className="bg-info">{orders && orders.length}</span></h2>
             {loadingOrders && <Loader/>}
             {errorOrders && <Message variant="danger">{errorOrders}</Message>}
 
@@ -172,7 +166,7 @@ const  ProfileScreen = () => {
                 </tr>
             </thead>
             <tbody>
-               {orders.map( order =>  
+               {orders && orders.map( order =>  
                <tr key={order._id}>
                     <td>{order._id}</td>
                     <td>{order.createdAt.substring(0,10)}</td>
@@ -209,4 +203,4 @@ const  ProfileScreen = () => {
   )
 }
 
-export default ProfileScreen
+export default React.memo(ProfileScreen)
