@@ -36,30 +36,47 @@ const  ProfileScreen = () => {
 
     const orders = JSON.parse(localStorage.getItem('myOrders'));
 
-    useEffect(()=> {
+//     useEffect(()=> {
+//     if(!userInfo){
+//         dispatch({type: USER_UPDATE_PROFILE_RESET})
+//         dispatch(GetUserDetails('profile'));
+//         dispatch(MyOrderedLists())
+//     }
+// }, [dispatch, userInfo, orders])
+
+
+useEffect(() => {
     if(!userInfo){
-        dispatch({type: USER_UPDATE_PROFILE_RESET})
-        dispatch(GetUserDetails('profile'));
-        dispatch(MyOrderedLists())
-    }
-}, [dispatch, userInfo, orders])
-
-
-    useEffect(() => {
-        if(!userInfo){
-            navigate('/login')
+        navigate('/login')
+    }else{
+        if(!orders || success || loading ){ 
+            dispatch({type: USER_UPDATE_PROFILE_RESET})
+            dispatch(GetUserDetails('profile'));
+            dispatch(MyOrderedLists())
         }else{
-            if(!orders || success || loading){ 
-                dispatch({type: USER_UPDATE_PROFILE_RESET})
-                dispatch(GetUserDetails('profile'));
-                dispatch(MyOrderedLists())
-            }else{
-                setName(user.name);
-                setEmail(user.email);
-            }
+            setName(user.name);
+            setEmail(user.email);
         }
+    }
+  
+}, [userInfo, orders, user, dispatch, navigate, success, loading])
+
+
+    // useEffect(() => {
+    //     if(!userInfo){
+    //         navigate('/login')
+    //     }else{
+    //         if(!user || !user.name || success || userInfo._id !== user._id){ 
+    //             dispatch({type: USER_UPDATE_PROFILE_RESET})
+    //             dispatch(GetUserDetails('profile'));
+    //             dispatch(MyOrderedLists())
+    //         }else{
+    //             setName(user.name);
+    //             setEmail(user.email);
+    //         }
+    //     }
       
-    }, [userInfo, orders, user, dispatch, navigate, success, loading])
+    // }, [userInfo, orders, user, dispatch, navigate, success, loading])
 
     const emailChangeHandler = (e) => {
         setEmail(e.target.value);
