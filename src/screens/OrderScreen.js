@@ -1,27 +1,25 @@
 import React, { useState, useEffect } from "react";
-import {  useParams } from "react-router-dom";
-import { Row, Col, Image, Card, ListGroup } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import { Row, Col, Image, Card, ListGroup, Button } from "react-bootstrap";
 import { useDispatch, useSelector} from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import {GetOrderDetails, PayOrder} from '../actions/OrderActions';
+import {GetOrderDetails} from '../actions/OrderActions';
 
 const OrderScreen = () => {
     const orderId = useParams().id;
     const dispatch = useDispatch();
     const [sdkReady, setSdkReady] = useState(false);
-    const shippingInfo = JSON.parse(localStorage.getItem('shippingAddress'));
+    const shippingInfo = JSON.parse(localStorage.getItem('myOrders'))[22].shippingAddress;
     const paymentMethod = JSON.parse(localStorage.getItem('paymentMethod'));
+
+    const navigate = useNavigate();
     
     const orderDetails = useSelector(state => state.orderDetails);
     const {error, loading, order } = orderDetails
 
     const orderpay = useSelector(state => state.orderPay);
     const {loading: loadingPay, success: successPay} = orderpay
-
-    if(!order || successPay || order._id  !== Number(orderId)){
-        dispatch(GetOrderDetails(orderId))
-    }
 
     useEffect(()=>{
         if(!order || successPay || order._id !== Number(orderId)){
@@ -49,9 +47,12 @@ const addPayPalScript = () => {
 
 // the paymentResult is what paypal returns
     // const successPaymentHandler = (paymentResult) => {
-    //     dispatch(PayOrder(orderId, paymentResult))
+    //     // dispatch(PayOrder(orderId, paymentResult))
     // }
 
+    const orderProcessHandler = () => {
+        navigate('/profile')
+    }
 
   return ( <div>
 
@@ -62,7 +63,7 @@ const addPayPalScript = () => {
             {error && <Message variant="danger">{error}</Message>}
             <Col md={8}>
                 <ListGroup>
-                    <ListGroup.Item>
+                    {order && <ListGroup.Item>
                         <h2>Shipping</h2>
                         <p> <b>Name:  </b>{order.user.name} </p>
                         <p> <b>Email:  </b><a href={`mailto:${order.user.email}`} >{order.user.email}</a> </p>
@@ -71,15 +72,15 @@ const addPayPalScript = () => {
                         {order.isDelivered ? <Message variant="success">Delivered at: {order.paidAt.substring(0,10)} </Message> 
                                      : <Message variant="warning">Not Delivered</Message>
                         }
-                    </ListGroup.Item>
+                    </ListGroup.Item>}
 
-                    <ListGroup.Item>
+                   {order &&  <ListGroup.Item>
                         <h2>Payment Method</h2>
                         <p><b>Method: </b>{paymentMethod} </p>
                        {order.isPaid ? <Message variant="success">Paid at: {order.paidAt.substring(0,10)} </Message> 
                                      : <Message variant="warning">Not Paid</Message>
                         }
-                    </ListGroup.Item>
+                    </ListGroup.Item>}
 
                     <ListGroup.Item>
                         <h2>Order Items</h2>
@@ -132,7 +133,15 @@ const addPayPalScript = () => {
                             </Row>}
                         </ListGroup.Item>
 
+                        
+                    
+                     
                     </ListGroup>
+
+                    {/* Enter paypal component */}
+                    <Button className="mt-3 btn-warning w-100" onClick={orderProcessHandler}>Paypal</Button>
+                                {/* <Button className="my-1 btn-danger w-100">Paypal</Button>
+                                <Button className="my-1 btn-success w-100">Paypal</Button> */}
                 </Card>
             </Col>
         </Row>
@@ -140,4 +149,4 @@ const addPayPalScript = () => {
   )
 }
 
-export default OrderScreen;
+export default React.memo(OrderScreen);

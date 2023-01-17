@@ -15,8 +15,6 @@ const  PlaceOrderScreen = () => {
     const shippingInfo = JSON.parse(localStorage.getItem('shippingAddress'));
     const paymentMethod = JSON.parse(localStorage.getItem('paymentMethod'));
    
-
-
     const cart = useSelector(state => state.cart);
     const dispatch = useDispatch();
 

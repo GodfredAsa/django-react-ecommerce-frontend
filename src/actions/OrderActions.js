@@ -13,6 +13,10 @@ import {
   ORDER_PAY_SUCCESS,
   ORDER_PAY_FAIL,
   ORDER_PAY_RESET,
+  MY_ORDER_LIST_REQUEST,
+  MY_ORDER_LIST_SUCCESS,
+  MY_ORDER_LIST_FAIL,
+  MY_ORDER_LIST_RESET,
 } from "../constants/OrderConstants";
 
 export const CreateOrder = (order) => async (dispatch, getState) => {
@@ -91,9 +95,7 @@ export const GetOrderDetails = (id) => async (dispatch, getState) => {
   }
 };
 
-
 // ORDER PAY ACTION 
-
 export const PayOrder = (id, paymentResult) => async (dispatch, getState) => {
     try {
       dispatch({ type: ORDER_PAY_REQUEST });
@@ -119,6 +121,8 @@ export const PayOrder = (id, paymentResult) => async (dispatch, getState) => {
         type: ORDER_PAY_SUCCESS,
         payload: data,
       });
+
+      // local storage content in here 
     } catch (error) {
       dispatch({
         type: ORDER_PAY_FAIL,
@@ -129,4 +133,41 @@ export const PayOrder = (id, paymentResult) => async (dispatch, getState) => {
       });
     }
   };
+
+// MY ORDER LIST ACTION
+export const MyOrderedLists = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: MY_ORDER_LIST_REQUEST });
+
+    // getting the login user
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/orders/myorders`, config);
+
+    dispatch({
+      type: MY_ORDER_LIST_SUCCESS,
+      payload: data,
+    });
+
+    localStorage.setItem('myOrders', JSON.stringify(data))
+  } catch (error) {
+    dispatch({
+      type: MY_ORDER_LIST_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
   
