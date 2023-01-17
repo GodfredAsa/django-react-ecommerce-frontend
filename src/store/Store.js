@@ -16,7 +16,8 @@ import {
     UserDetailsReducer, 
     UserUpdateProfileReducer,
     UserListReducer,
-    DeleteUserReducer
+    DeleteUserReducer,
+    UpdateUserReducer
     
 } from "../reducers/UserReducer"
 
@@ -24,17 +25,20 @@ import {
 const reducer = combineReducers({
     productList: productListReducers,
     productDetails: ProductDetailReducer,
+    
     cart: CartReducer,
+    orderCreate: OrderCreateReducer,
+    orderDetails: OrderDetailsReducer,
+    orderPay: OrderPayReducer,
+   
     userLogin: UserLoginReducer,
     userRegister: UserRegisterReducer,
     userDetails: UserDetailsReducer,
     userUpdateProfile: UserUpdateProfileReducer,
-    orderCreate: OrderCreateReducer,
-    orderDetails: OrderDetailsReducer,
-    orderPay: OrderPayReducer,
     myOrderList: MyOrderListReducer,
     userList: UserListReducer,
     deleteUser: DeleteUserReducer,
+    updateUser: UpdateUserReducer,
 })
 
 // pulling cart data from localStorage into our state

@@ -36,47 +36,22 @@ const  ProfileScreen = () => {
 
     const orders = JSON.parse(localStorage.getItem('myOrders'));
 
-//     useEffect(()=> {
-//     if(!userInfo){
-//         dispatch({type: USER_UPDATE_PROFILE_RESET})
-//         dispatch(GetUserDetails('profile'));
-//         dispatch(MyOrderedLists())
-//     }
-// }, [dispatch, userInfo, orders])
-
-
 useEffect(() => {
     if(!userInfo){
         navigate('/login')
     }else{
-        if(!orders || success || loading ){ 
+       
+        if(!user || !orders ){ 
             dispatch({type: USER_UPDATE_PROFILE_RESET})
             dispatch(GetUserDetails('profile'));
             dispatch(MyOrderedLists())
         }else{
-            setName(user.name);
-            setEmail(user.email);
+                setName(user.name);
+                setEmail(user.email);
         }
     }
   
-}, [userInfo, orders, user, dispatch, navigate, success, loading])
-
-
-    // useEffect(() => {
-    //     if(!userInfo){
-    //         navigate('/login')
-    //     }else{
-    //         if(!user || !user.name || success || userInfo._id !== user._id){ 
-    //             dispatch({type: USER_UPDATE_PROFILE_RESET})
-    //             dispatch(GetUserDetails('profile'));
-    //             dispatch(MyOrderedLists())
-    //         }else{
-    //             setName(user.name);
-    //             setEmail(user.email);
-    //         }
-    //     }
-      
-    // }, [userInfo, orders, user, dispatch, navigate, success, loading])
+}, [userInfo, orders, user, dispatch, navigate, success, loading, setName, setEmail])
 
     const emailChangeHandler = (e) => {
         setEmail(e.target.value);

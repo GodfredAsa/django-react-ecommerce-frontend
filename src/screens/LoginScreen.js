@@ -20,7 +20,7 @@ const LoginScreen = () => {
    
     useEffect(() => {
         if(userInfo) {
-            navigate('/cart')
+            navigate('/profile')
             
         }else if(!userInfo){
             navigate('/login')
