@@ -3,16 +3,16 @@ import { useEffect} from "react";
 import {Button, Table, ButtonGroup} from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap';
 import Message from '../components/Message'
-import Loader from '../components/Loader'
+import Loader from '../components/Loader';
 import {useDispatch, useSelector} from "react-redux";
 import {ListUsers, DeleteUser} from '../actions/UserActions';
 import { useNavigate } from 'react-router-dom';
 
 export default function UserListScreen() {
     const dispatch = useDispatch();
-    const userLists = useSelector(state => state.userList)
+    const userLists = useSelector(state => state.userList);
     const {loading, users, error} = userLists;
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const userLogin = useSelector(state => state.userLogin);
     const {userInfo} = userLogin;
 
@@ -32,6 +32,8 @@ export default function UserListScreen() {
             dispatch(DeleteUser(id))
         }
     }
+
+
 
   return (
     <div>
@@ -60,7 +62,7 @@ export default function UserListScreen() {
                     <td>{user.isAdmin ? <p className='fas fas-check' style={{'color': 'green'}}>Admin</p> : <p>Not Admin</p>}</td>
                     <td>
                     <ButtonGroup style={{'fontSize': '1rem'}}>
-                           <LinkContainer to={`admin/user/${user._id}`}  >
+                           <LinkContainer to={`/user/${user._id}/edit`}  >
                                 <Button 
                                     className='btn-sm' 
                                     variant='success' 
@@ -85,6 +87,14 @@ export default function UserListScreen() {
                 </tr>)}
             </tbody>
           </Table>}
+
+          {/* <Button 
+                className='btn-sm float-right' 
+                variant='light' 
+                type='button'
+                // onClick={() => deleteUserHandler(user._id)}
+                >Add User
+            </Button> */}
       
     </div>
   )
