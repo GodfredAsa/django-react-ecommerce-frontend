@@ -10,7 +10,6 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import FormContainer from "../components/FormContainer";
 import {USER_UPDATE_RESET} from '../constants/UserConstants'
-import userEvent from '@testing-library/user-event';
 
 
 const UserEditScreen = () => {
