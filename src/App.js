@@ -15,6 +15,7 @@ import OrderScreen from "./screens/OrderScreen";
 import UserListScreen from "./screens/UserListScreen";
 import UserEditScreen from "./screens/UserEditScreen";
 import ProductListScreen from "./screens/ProductListScreen";
+import ProductEditScreen from "./screens/ProductEditScreen";
 
 function App() {
   return (
@@ -35,10 +36,10 @@ function App() {
 
             {/* ADMIN ROUTES */}
             <Route path="/admin/productlist" element={<ProductListScreen />} />
-            <Route path="/product/:id/edit" element={<h1>Hellow</h1>} />
-
             <Route path="/admin/userlist" element={<UserListScreen />} />
             <Route path="/user/:id/edit" element={<UserEditScreen />} />
+           
+            <Route path="/products/:id/edit" element={<ProductEditScreen/>} />
             {/* <Route path="/login" element={cartItems.length < 1 ? <LoginScreen />:<CartScreen /> }></Route> */}
 
             {/* pattern /cart/:id means the id is optional  */}
