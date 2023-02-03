@@ -1,12 +1,13 @@
 import React from 'react'
-import { useEffect} from "react";
-import {Button, Table, ButtonGroup, Row, Col, Card} from 'react-bootstrap'
+import { useEffect } from "react";
+import {Button, Table, ButtonGroup, Row, Col} from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap';
 import Message from '../components/Message'
 import Loader from '../components/Loader';
 import {useDispatch, useSelector} from "react-redux";
-import {ListProducts, DeleteProduct}  from '../actions/ProductActions'
+import {ListProducts, DeleteProduct, CreateProduct}  from '../actions/ProductActions'
 import { useNavigate } from 'react-router-dom';
+import {PRODUCT_CREATE_RESET} from '../constants/ProductConstants'
 
 
 export default function ProductListScreen() {
@@ -21,13 +22,18 @@ export default function ProductListScreen() {
     const deleteProduct = useSelector(state => state.deleteProduct);
     const {loading: loadingDelete, error: errorDelete, successDelete} = deleteProduct;
 
+    const createProduct = useSelector(state => state.createProduct);
+    const {loading: loadingCreate, error: errorCreate, success: successCreate, product: createdProduct} = createProduct;
+
     useEffect(()=> {
-        if(userInfo && userInfo.isAdmin){
-            dispatch(ListProducts())
+        dispatch({type: PRODUCT_CREATE_RESET})
+        if(!userInfo.isAdmin) { navigate('/login')}
+        if(createdProduct){
+            navigate(`/products/${createdProduct._id}/edit`)
         }else{
-            navigate('/login')
+            dispatch(ListProducts())  
         }
-    }, [dispatch, userInfo, navigate, successDelete])
+    }, [dispatch, userInfo, navigate, successDelete, successCreate, createdProduct])
 
     const deleteProductHandler = (id) => {
         if(window.confirm("Are you Sure in deleting a product")){
@@ -36,8 +42,8 @@ export default function ProductListScreen() {
         }
     }
 
-    const createProductHandler = (product) => {
-        console.log("Creating Product ...")
+    const createProductHandler = () => {
+        dispatch(CreateProduct())
     }
 
   return (
@@ -52,6 +58,9 @@ export default function ProductListScreen() {
 
    {loadingDelete && <Loader/>}
    {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
+
+   {loadingCreate && <Loader/>}
+   {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
 
     {loading ? <Loader/> 
     : error ? <Message variant="danger">{error}</Message> 
@@ -82,7 +91,7 @@ export default function ProductListScreen() {
 
                 <td>
                 <ButtonGroup style={{'fontSize': '1rem'}}>
-                       <LinkContainer to={`/product/${product._id}/edit`}  >
+                       <LinkContainer to={`/products/${product._id}/edit`}  >
                             <Button 
                                 className='btn-sm' 
                                 variant='success' 
