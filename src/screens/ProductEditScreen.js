@@ -11,7 +11,7 @@ import { ProductDetails } from "../actions/ProductDetailsAction";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import FormContainer from "../components/FormContainer";
-import {Updateroduct} from '../actions/ProductActions'
+import {UpdateProduct} from '../actions/ProductActions'
 import {PRODUCT_UPDATE_RESET} from '../constants/ProductConstants'
 
 const ProductEditScreen = () => {
@@ -121,7 +121,7 @@ const ProductEditScreen = () => {
       countInStock,
       description
       }
-    dispatch(Updateroduct(updatedProduct))
+    dispatch(UpdateProduct(updatedProduct))
     navigate('/admin/productlist')
 
   };
