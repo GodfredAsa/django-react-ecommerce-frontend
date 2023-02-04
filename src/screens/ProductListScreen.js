@@ -6,15 +6,16 @@ import Message from '../components/Message'
 import Loader from '../components/Loader';
 import {useDispatch, useSelector} from "react-redux";
 import {ListProducts, DeleteProduct, CreateProduct}  from '../actions/ProductActions'
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {PRODUCT_CREATE_RESET} from '../constants/ProductConstants'
+import Paginate from '../components/Paginate';
 
 
 export default function ProductListScreen() {
 
     const dispatch = useDispatch();
     const productList = useSelector(state => state.productList);
-    const {loading, products, error} = productList;
+    const {loading, products, error, page, pages} = productList;
     const navigate = useNavigate();
     const userLogin = useSelector(state => state.userLogin);
     const {userInfo} = userLogin;
@@ -25,15 +26,17 @@ export default function ProductListScreen() {
     const createProduct = useSelector(state => state.createProduct);
     const {loading: loadingCreate, error: errorCreate, success: successCreate, product: createdProduct} = createProduct;
 
+    const keyword  = useLocation().search
+    
     useEffect(()=> {
         dispatch({type: PRODUCT_CREATE_RESET})
         if(!userInfo.isAdmin) { navigate('/login')}
         if(createdProduct){
             navigate(`/products/${createdProduct._id}/edit`)
         }else{
-            dispatch(ListProducts())  
+            dispatch(ListProducts(keyword))  
         }
-    }, [dispatch, userInfo, navigate, successDelete, successCreate, createdProduct])
+    }, [dispatch, userInfo, navigate, successDelete, successCreate, createdProduct, keyword])
 
     const deleteProductHandler = (id) => {
         if(window.confirm("Are you Sure in deleting a product")){
@@ -64,7 +67,9 @@ export default function ProductListScreen() {
 
     {loading ? <Loader/> 
     : error ? <Message variant="danger">{error}</Message> 
-    : <Table  bordered hover responsive className='table-sm'>
+    : <div>
+
+<Table  bordered hover responsive className='table-sm'>
         <thead>
             <tr>
                 <th>ID</th>
@@ -112,17 +117,14 @@ export default function ProductListScreen() {
                             >Delete
                         </Button>
                     </ButtonGroup>
-
                 </td>
-
-
-                
-
-
-    
             </tr>)}
         </tbody>
-      </Table>}
+      </Table>
+
+      <Paginate page={page} pages={pages} isAdmin = {true}/>
+        
+    </div>}
 </div>
   )
 }
