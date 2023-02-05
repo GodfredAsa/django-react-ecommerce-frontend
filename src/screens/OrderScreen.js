@@ -20,7 +20,7 @@ const OrderScreen = () => {
     const {error, loading, order } = orderDetails
 
     const orderpay = useSelector(state => state.orderPay);
-    const {loading: loadingPay, success: successPay} = orderpay
+    const {loading: loadingPay, success: successPay, error: errorPay} = orderpay
     
     const orderDeliver = useSelector(state => state.orderDeliver);
     const {loading: loadingDeliver, success: successDeliver, error: errorDeliver} = orderDeliver
@@ -44,9 +44,7 @@ const OrderScreen = () => {
                 }else{
                     setSdkReady(true)
                 }
-
         }
-       
 }
    }, [order, orderId, dispatch, successPay, successDeliver, navigate, userInfo])
 
@@ -62,17 +60,12 @@ const addPayPalScript = () => {
     document.body.appendChild(script)
 }
 
-// the paymentResult is what paypal returns
-    const successPaymentHandler = (paymentResult) => {
-        dispatch(PayOrder(orderId, paymentResult))
+    const successPaymentHandler = () => {
+        dispatch(PayOrder(order))
     }
 
     const deliverOrderHandler = () => {
         dispatch(DeliverOrder(order))
-    }
-
-    const orderProcessHandler = () => {
-        navigate('/profile')
     }
 
   return ( <div>
@@ -90,7 +83,7 @@ const addPayPalScript = () => {
                         <p> <b>Email:  </b><a href={`mailto:${order.user.email}`} >{order.user.email}</a> </p>
                         <p><b>Shipping: </b>{shippingInfo.address}, {shippingInfo.city}, {shippingInfo.postalCode}, {shippingInfo.country} </p>
 
-                        {order.isDelivered ? <Message variant="success">Delivered at: {order.paidAt.substring(0,10)} </Message> 
+                        {order.isDelivered ? <Message variant="success">Delivered at: {order.deliveredAt.substring(0,10)}</Message> 
                                      : <Message variant="warning">Not Delivered</Message>
                         }
                     </ListGroup.Item>}
@@ -161,9 +154,7 @@ const addPayPalScript = () => {
 
                     {/* Enter paypal component */}
                     {order && !order.isPaid &&  <>
-                        <Button className="mt-3 btn-warning w-100" onClick={orderProcessHandler}>Paypal</Button>
-                                <Button className="my-1 btn-danger w-100">Paypal</Button>
-                                <Button className="my-1 btn-success w-100">Paypal</Button>
+                        <Button className="mt-3 btn-warning w-100" onClick={successPaymentHandler}>Make Payment</Button>
                     </>}
 
 

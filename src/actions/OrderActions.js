@@ -12,11 +12,10 @@ import {
   ORDER_PAY_REQUEST,
   ORDER_PAY_SUCCESS,
   ORDER_PAY_FAIL,
-  ORDER_PAY_RESET,
+
   MY_ORDER_LIST_REQUEST,
   MY_ORDER_LIST_SUCCESS,
   MY_ORDER_LIST_FAIL,
-  MY_ORDER_LIST_RESET,
 
   ORDER_LIST_REQUEST,
   ORDER_LIST_SUCCESS,
@@ -25,7 +24,7 @@ import {
   ORDER_DELIVER_REQUEST,
   ORDER_DELIVER_SUCCESS,
   ORDER_DELIVER_FAIL,
-  ORDER_DELIVER_RESET,
+
 } from "../constants/OrderConstants";
 
 export const CreateOrder = (order) => async (dispatch, getState) => {
@@ -70,12 +69,10 @@ export const CreateOrder = (order) => async (dispatch, getState) => {
 };
 
 // =======  ORDER DETAILS ACTION  ========
-
 export const GetOrderDetails = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: ORDER_DETAILS_REQUEST });
 
-    // getting the login user
     const {
       userLogin: { userInfo },
     } = getState();
@@ -105,7 +102,7 @@ export const GetOrderDetails = (id) => async (dispatch, getState) => {
 };
 
 // ORDER PAY ACTION 
-export const PayOrder = (id, paymentResult) => async (dispatch, getState) => {
+export const PayOrder = (order) => async (dispatch, getState) => {
     try {
       dispatch({ type: ORDER_PAY_REQUEST });
   
@@ -121,8 +118,8 @@ export const PayOrder = (id, paymentResult) => async (dispatch, getState) => {
         },
       };
   
-      const { data } = await axios.put(`/api/orders/${id}/pay`,
-                      paymentResult, 
+      const { data } = await axios.put(`/api/orders/${order._id}/pay`,
+                      {},
                       config
                     );
   
