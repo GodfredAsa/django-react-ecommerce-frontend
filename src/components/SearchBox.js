@@ -14,7 +14,7 @@ function SearchBox() {
     const searcchKeywordHandler = e => {
             setKeyword(e.target.value);
             setSearchParams(e.target.value);
-            // navigate(`/?keyword=${e.target.value}`)
+            navigate(`/?keyword=${e.target.value}&page=1`)
 
     }
 
@@ -22,7 +22,7 @@ function SearchBox() {
     const searchSubmitHandler = e => {
         e.preventDefault();
         if(keyword){
-            navigate(`/?keyword=${keyword}`)
+            navigate(`/?keyword=${keyword}&page=1`)
         }else{
             navigate(location.pathname)
         }
